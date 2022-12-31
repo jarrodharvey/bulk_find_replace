@@ -10,11 +10,13 @@ replacements <- readxl::read_excel(
 ) |>
   purrr::modify_at(
     "Original",
+    # Escape the characters that have special meaning in regex
     ~ stringr::str_replace_all(
       .x,
       "([\\^\\$\\.\\?\\*\\|\\+\\(\\)\\[\\{\\]])",
       "\\\\\\1"
     ) |> (\(.) {
+      # Make the regex case insensive and match the entire content of the cell
       glue::glue("(?i)^{.}$")
     })()
   )
